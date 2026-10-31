@@ -69,6 +69,12 @@ public class TrainTractionModel {
         return Math.max(1, carriages) * CEEConfigs.server().resistanceValues.electricTrainMassPerCarriage.get();
     }
 
+    /** Effective mass including rotating masses (drive line, wheels) [kg]. */
+    public static double effectiveMass(int carriages) {
+        double gamma = CEEConfigs.server().resistanceValues.electricTrainRotatingMassFactor.get();
+        return (1d + gamma) * totalMass(carriages);
+    }
+
     /** Baseline auxiliary draw (lights, HVAC, controls), always present while powered [W]. */
     public static double auxiliaryPower(int carriages) {
         return Math.max(1, carriages) * 2_000d;
@@ -239,6 +245,40 @@ public class TrainTractionModel {
         return result;
     }
 
+    /**
+     * Electrical power drawn for the traction the drive was ACTUALLY commanded to apply
+     * [W], plus motor reverse braking, plus the auxiliary baseline.
+     *
+     * The older "needed" formulation (resistance + grade + inertia) overstates the draw
+     * whenever the lever commands less than the resistance: a COAST position at a
+     * standstill drew phantom traction power for a force the motors never produced.
+     * This overload takes the applied effort from the gear law, which is the only
+     * honest figure.
+     */
+    public static double electricalDemandApplied(double appliedEffortN, double speedMs,
+                                                 int carriages, double powerScale, boolean motorBraking) {
+        double v = Math.abs(speedMs);
+        var res = CEEConfigs.server().resistanceValues;
+        double margin = Math.max(res.electricTrainMarginFactor.get(), 1e-4d);
+        double auxFactor = Math.max(res.electricTrainAuxiliaryLoadFactor.get(), 1e-4d);
+
+        double deliverable = availableEffort(v, carriages, powerScale);
+        double effort = Math.max(0d, Math.min(appliedEffortN, deliverable));
+        double tractionPower = effort * Math.max(v, MIN_SPEED_FOR_POWER) / (driveEfficiency() * auxFactor);
+
+        double motorPower = 0d;
+        if (motorBraking) {
+            double gamma = CEEConfigs.server().resistanceValues.electricTrainRotatingMassFactor.get();
+            double effective = (1d + gamma) * totalMass(carriages);
+            motorPower = motorReverseBrake(v, carriages, powerScale) * effective * Math.max(v, MIN_SPEED_FOR_POWER);
+        }
+
+        double result = tractionPower * margin + motorPower + auxiliaryPower(carriages);
+        if (Double.isNaN(result) || result < MIN_DEMAND)
+            return MIN_DEMAND;
+        return result;
+    }
+
     // ------------------------------------------------------------------
     // Cruise state (for the display screen, B-04)
     // ------------------------------------------------------------------
@@ -340,8 +380,10 @@ public class TrainTractionModel {
     public static double gearAcceleration(double signedSpeedMs, double gradeToPlusX, int carriages,
                                           double powerScale, TrainGear gear, double cruiseSpeedMs,
                                           double brakeMs2, boolean emergency, double[] out) {
-        if (out != null && out.length > 0)
+        if (out != null && out.length > 1) {
             out[0] = 0d;
+            out[1] = 0d;
+        }
         double v = signedSpeedMs;
         double speed = Math.abs(v);
         double gamma = CEEConfigs.server().resistanceValues.electricTrainRotatingMassFactor.get();
@@ -367,6 +409,7 @@ public class TrainTractionModel {
         // brake may take over part of the work but never silently add to it (B-06).
         double brakeTotal = Math.max(brakeMs2, dynamicPart);
         double dynamicApplied = 0d;
+        double tractionApplied = 0d;
         double leverBrakeForce = 0d;
 
         // An emergency brake takes the traction off (brake pipe application trips the
@@ -377,6 +420,7 @@ public class TrainTractionModel {
             case ACCELERATE -> {
                 if (!tractionCut && speed < ceiling) {
                     force += effort;
+                    tractionApplied = effort;
                 }
                 // At or above the ceiling: no traction AND no brake. Braking there
                 // produced the accelerate/brake bounce ("蹦迪"); the ceiling is enforced
@@ -402,6 +446,7 @@ public class TrainTractionModel {
                     }
                 } else if (!tractionCut && speed < Math.min(ceiling, reverseMaxSpeed())) {
                     force -= effort;
+                    tractionApplied = effort;
                 }
             }
             case CRUISE -> {
@@ -417,8 +462,10 @@ public class TrainTractionModel {
                         force -= brakeHeading * frictionBrake() * mass;
                     }
                 } else if (speed < target - CRUISE_DEADBAND) {
-                    if (!tractionCut && speed < ceiling)
+                    if (!tractionCut && speed < ceiling) {
                         force += heading * effort;
+                        tractionApplied = effort;
+                    }
                 } else if (speed > target + CRUISE_DEADBAND || tractionCut) {
                     leverBrakeForce = -brakeHeading * brakeTotal * mass;
                     force += leverBrakeForce;
@@ -429,7 +476,9 @@ public class TrainTractionModel {
                     double needed = Math.signum(v) * runningResistance(speed, carriages)
                             + gradeResistance(gradeToPlusX, carriages);
                     if (needed >= 0d) {
-                        force += Math.min(needed, effort);
+                        double applied = Math.min(needed, effort);
+                        force += applied;
+                        tractionApplied = applied;
                     } else {
                         double brakeNeed = -needed;
                         double dynamicAvail = Math.min(dynamicPart * mass, effort);
@@ -460,6 +509,7 @@ public class TrainTractionModel {
             double motorEmergency = motorReverseBrake(speed, carriages, powerScale);
             force -= Math.signum(v) * (frictionBrake() + motorEmergency) * mass;
             dynamicApplied = 0d;
+            tractionApplied = 0d;
         }
 
         double a = force / mass;
@@ -490,8 +540,10 @@ public class TrainTractionModel {
         }
 
         a = Double.isFinite(a) ? a : 0d;
-        if (out != null && out.length > 0)
+        if (out != null && out.length > 1) {
             out[0] = dynamicApplied;
+            out[1] = Math.max(0d, tractionApplied);
+        }
         return a;
     }
 

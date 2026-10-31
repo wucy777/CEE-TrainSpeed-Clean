@@ -562,7 +562,7 @@ public class TrainDriverState {
                             train.carriages.size(),
                             pantographFlags(train),
                             (float) (Math.abs(train.speed) * 20),
-                            (float) capSpeed(data) * 20f,
+                            (float) capSpeed(data),
                             (float) (data.realPowerW / 1000.0),
                             (float) data.powerScale,
                             data.motorBraking,

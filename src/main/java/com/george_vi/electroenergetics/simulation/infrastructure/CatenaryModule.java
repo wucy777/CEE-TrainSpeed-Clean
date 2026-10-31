@@ -182,8 +182,18 @@ public class CatenaryModule {
             double accelerationMs2 = trainSpeedMs - trainData.lastSpeed;
             double grade = trainData.trackGrade;
             int consist = Math.max(1, train.carriages.size());
-            double power = com.george_vi.electroenergetics.content.railway_electrification.TrainTractionModel.electricalDemand(
-                    trainSpeedMs, accelerationMs2, grade, consist, trainData.powerScale, trainData.motorBraking);
+            double power;
+            if (com.george_vi.electroenergetics.content.railway_electrification.TrainControlModeLogic.railShoeOnly(train)) {
+                // Shoe-only consists keep upstream behaviour (M118): the original
+                // needed-based demand, which models a train that always tries to run.
+                power = com.george_vi.electroenergetics.content.railway_electrification.TrainTractionModel.electricalDemand(
+                        trainSpeedMs, accelerationMs2, grade, consist, trainData.powerScale, trainData.motorBraking);
+            } else {
+                // Lever-driven and scheduled electric trains draw what the drive was
+                // actually told to apply - COAST at a stand draws only auxiliaries.
+                power = com.george_vi.electroenergetics.content.railway_electrification.TrainTractionModel.electricalDemandApplied(
+                        trainData.tractionEffortN, trainSpeedMs, consist, trainData.powerScale, trainData.motorBraking);
+            }
             if (trainData.accumulatorCharge < trainData.accumulators)
                 power += 5000; // accumulator charging draw (W)
             trainData.realPowerW = power;

@@ -217,6 +217,7 @@ public class TrainMixin implements ICEETrainExtension {
         }
 
         data.braking = false;
+        data.tractionEffortN = 0d;
         double actualTarget = self.targetSpeed;
         if (Mth.equal(actualTarget, self.speed))
             return;
@@ -232,6 +233,8 @@ public class TrainMixin implements ICEETrainExtension {
 
         if (self.speed < actualTarget) {
             self.speed = Math.min(self.speed + up * accelerationMod, actualTarget);
+            data.tractionEffortN = up * 400d
+                    * TrainTractionModel.effectiveMass(self.carriages.size());
         } else {
             // Braking at the blended service rate for the current speed; the electric
             // share is reported so the next circuit build can regenerate it.
@@ -289,12 +292,12 @@ public class TrainMixin implements ICEETrainExtension {
         // an inverted cab whenever the train was at rest.
         double gradeToPlusX = (self.speed < 0 ? -data.trackGrade : data.trackGrade) * mirror;
 
-        double[] dynamicOut = new double[1];
+        double[] lawOut = new double[2];
         double a = TrainTractionModel.gearAcceleration(
                 signedSpeedMs, gradeToPlusX, carriages, data.powerScale,
                 effectiveGear, cruiseCommand,
                 TrainTractionModel.frictionBrake(),
-                data.emergencyArmed, dynamicOut) * mirror;
+                data.emergencyArmed, lawOut) * mirror;
 
         double next = self.speed + a / 400d;
 
@@ -316,9 +319,10 @@ public class TrainMixin implements ICEETrainExtension {
         self.speed = next;
 
         // Regeneration is reported for the next circuit build.
-        data.braking = dynamicOut[0] > 0d;
-        data.regenerativeBrakeAccel = dynamicOut[0];
+        data.braking = lawOut[0] > 0d;
+        data.regenerativeBrakeAccel = lawOut[0];
         data.motorBraking = data.emergencyArmed && Math.abs(self.speed) * 20d > 0.05d;
+        data.tractionEffortN = Math.max(0d, lawOut[1]);
 
         // Create's own method clears this, and control() re-sets it while the driver
         // holds keys. The gear law leaves a clean slate each tick.

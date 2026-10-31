@@ -101,17 +101,13 @@ public class ElectricTrainHud {
     }
 
     private static String capLabel(SyncTrainPanelPacket panel) {
-        int capKmh = Math.round(panel.capSpeed() * 3.6f / 10f) * 10;
+        int capKmh = Math.round(panel.capSpeed() * 3.6f);
         if (panel.emergencyPenalty() || panel.penaltyActive())
             return String.format("限速 %d km/h (下一站解除)", capKmh);
         if (panel.overloaded())
-            return String.format("超载限速 %d km/h", capKmh);
-        return String.format("最高 %d km/h", Math.round(TrainControlHudCapDefault(panel)));
-    }
-
-    private static float TrainControlHudCapDefault(SyncTrainPanelPacket panel) {
-        // Unpowered stretches keep showing the design cap instead of blanking out (G-09).
-        return 100.8f * (panel.capSpeed() > 0 ? 1 : 1);
+            return String.format("超载限速 100 km/h", capKmh);
+        // Design ceiling in km/h; unpowered stretches keep showing it instead of blanking out (G-09).
+        return String.format("最高 %d km/h", Math.round(panel.designMaxSpeed() * 3.6f));
     }
 
     private static String powerLabel(SyncTrainPanelPacket panel) {

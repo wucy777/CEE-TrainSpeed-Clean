@@ -2,6 +2,7 @@ package com.george_vi.electroenergetics.content.railway_electrification.client;
 
 import com.george_vi.electroenergetics.content.railway_electrification.TrainControlMode;
 import com.george_vi.electroenergetics.content.railway_electrification.TrainGear;
+import com.george_vi.electroenergetics.client.TrainControlInput;
 import com.george_vi.electroenergetics.content.railway_electrification.packets.SyncTrainPanelPacket;
 import com.simibubi.create.content.trains.entity.CarriageContraptionEntity;
 import net.minecraft.client.Minecraft;
@@ -10,19 +11,19 @@ import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.network.chat.Component;
 import net.minecraft.util.Mth;
 
-import java.util.List;
-
 /**
- * The lever panel, bottom right (B-02/G-06/G-07/G-11):
- * a five-slot lever with a handle, the emergency brake and vigilance buttons,
- * a display screen, and the consist strip with pantograph positions and the head arrow.
- * Drawn procedurally - no texture assets, cached strings for performance (G-10).
+ * The lever panel, bottom right (B-02/G-06/G-07/G-11): a five-slot lever with a handle,
+ * the emergency brake and vigilance buttons, a display screen with a driving hint, and
+ * the consist strip with pantograph positions and the head arrow. Drawn procedurally -
+ * no texture assets, cached strings for performance (G-10).
  */
 public class TrainControlHud {
 
-    private static final int PANEL_W = 122;
+    private static final int PANEL_W = 128;
     private static final int LEVER_W = 22;
-    private static final int ROW = 10;
+    private static final int SLOT = 12;
+    private static final int LEVER_H = SLOT * 5 + 8;
+    private static final int ROW = 11;
 
     private static final int BG = 0xC0101215;
     private static final int BG_LIGHT = 0x282E3642;
@@ -34,12 +35,6 @@ public class TrainControlHud {
     private static final int AMBER = 0xFFFFC107;
     private static final int RED = 0xFFEF5350;
     private static final int SCREEN = 0xE00B1218;
-
-    // Cached text so we only rebuild strings when values change (G-10).
-    private static String cacheSpeed = "";
-    private static String cacheKmh = "";
-    private static String cachePower = "";
-    private static String cacheVolt = "";
 
     public static void render(GuiGraphics gg, float partialTicks) {
         Minecraft mc = Minecraft.getInstance();
@@ -54,7 +49,6 @@ public class TrainControlHud {
         int x = TrainControlLayout.rightPanelX(gg, PANEL_W);
         int y = gg.guiHeight() - panelHeight(panel) - TrainControlLayout.MARGIN;
 
-        // Frame
         gg.fill(x, y, x + PANEL_W, y + panelHeight(panel), BG);
         gg.fill(x, y, x + PANEL_W, y + 1, EDGE);
         gg.fill(x, y + panelHeight(panel) - 1, x + PANEL_W, y + panelHeight(panel), EDGE);
@@ -64,48 +58,37 @@ public class TrainControlHud {
         int cy = y + 4;
 
         // ---------------- mode & status line (G-11) ----------------
-        Component modeLabel = modeLabel(panel);
-        int statusColor = statusColor(panel);
-        gg.fill(x + 4, cy, x + PANEL_W - 4, cy + ROW, BG_LIGHT);
-        gg.drawString(font, modeLabel, x + 6, cy + 1, statusColor, false);
-        cy += ROW + 2;
+        gg.fill(x + 4, cy, x + PANEL_W - 4, cy + 10, BG_LIGHT);
+        gg.drawString(font, modeLabel(panel), x + 6, cy + 1, statusColor(panel), false);
+        cy += 12;
 
         // ---------------- lever + screen ----------------
         int leverTop = cy;
-        int leverHeight = ROW * 5 + 8;
-        drawLever(gg, font, panel, x + 4, leverTop, LEVER_W, leverHeight);
+        drawLever(gg, font, panel, x + 4, leverTop, LEVER_W, LEVER_H);
 
         int screenX = x + 4 + LEVER_W + 3;
         int screenW = PANEL_W - (LEVER_W + 11);
-        gg.fill(screenX, leverTop, screenX + screenW, leverTop + leverHeight, SCREEN);
+        gg.fill(screenX, leverTop, screenX + screenW, leverTop + LEVER_H, SCREEN);
 
-        String speed = String.format("%.1f", panel.speed());
-        String kmh = String.format("%.0f km/h", panel.speed() * 3.6);
-        if (!speed.equals(cacheSpeed)) {
-            cacheSpeed = speed;
-            cacheKmh = kmh;
-        }
-        gg.drawString(font, "速度", screenX + 4, leverTop + 3, TEXT_DIM, false);
-        gg.drawString(font, speed, screenX + 4, leverTop + 12, ACCENT, false);
-        gg.drawString(font, "m/s", screenX + 4 + font.width(speed) + 3, leverTop + 12 + 2, TEXT_DIM, false);
-        gg.drawString(font, cacheKmh, screenX + 4, leverTop + 23, TEXT_DIM, false);
-
-        // cap line (penalty / overload / overload cap)
+        int row = leverTop + 3;
+        gg.drawString(font, String.format("%.1f m/s", panel.speed()), screenX + 4, row, ACCENT, false);
+        row += ROW;
+        gg.drawString(font, String.format("%.0f km/h", panel.speed() * 3.6), screenX + 4, row, TEXT_DIM, false);
+        row += ROW;
         String cap = capText(panel);
-        if (cap != null)
-            gg.drawString(font, cap, screenX + 4, leverTop + 33, RED, false);
-
-        String power = powerText(panel);
-        if (!power.equals(cachePower)) {
-            cachePower = power;
-            cacheVolt = String.format("%.1f kV", Math.abs(panel.powerScale()) * 25.0f);
+        if (cap != null) {
+            gg.drawString(font, cap, screenX + 4, row, RED, false);
+            row += ROW;
         }
-        gg.drawString(font, cachePower, screenX + 4, leverTop + 43, panel.motorBraking() ? RED : GREEN, false);
-        gg.drawString(font, cacheVolt, screenX + 4, leverTop + 53, TEXT_DIM, false);
-        String consist = String.format("车厢 %d · 电机 %d", panel.carriageCount(), panel.motorCarriages());
-        gg.drawString(font, consist, screenX + 4, leverTop + leverHeight - 10, TEXT_DIM, false);
+        gg.drawString(font, powerText(panel), screenX + 4, row, panel.motorBraking() ? RED : GREEN, false);
+        row += ROW;
+        gg.drawString(font, String.format("%.1f kV · %d%%", panel.powerScale() * 25.0f,
+                Math.round(panel.powerScale() * 100)), screenX + 4, row, TEXT_DIM, false);
+        row += ROW;
+        gg.drawString(font, String.format("车厢 %d · 电机 %d", panel.carriageCount(), panel.motorCarriages()),
+                screenX + 4, row, TEXT_DIM, false);
 
-        cy = leverTop + leverHeight + 3;
+        cy = leverTop + LEVER_H + 3;
 
         // ---------------- buttons: K emergency / J vigilance (B-02) ----------------
         int btnH = 12;
@@ -118,19 +101,26 @@ public class TrainControlHud {
         gg.fill(bx2, cy, bx2 + btnW, cy + btnH, BG_LIGHT);
         int stageColor = panel.confirmStage() == 2 ? RED : panel.confirmStage() == 1 ? AMBER : TEXT_DIM;
         gg.drawString(font, "J 确认", bx2 + 8, cy + 2, stageColor, false);
-        // vigilance progress underline (C-01)
         if (panel.confirmStage() != 0) {
             int barW = (int) ((btnW - 4) * Mth.clamp(panel.confirmProgress(), 0, 1));
             gg.fill(bx2 + 2, cy + btnH - 2, bx2 + 2 + barW, cy + btnH - 1, stageColor);
         }
-        cy += btnH + 4;
+        cy += btnH + 2;
+
+        // ---------------- driving hint (how to actually start) ----------------
+        gg.drawString(font, hintText(panel), x + 5, cy, TEXT_DIM, false);
+        cy += ROW + 1;
 
         // ---------------- consist strip with pantographs (G-07) ----------------
         drawConsist(gg, panel, x + 5, cy, PANEL_W - 10, 16);
     }
 
     private static int panelHeight(SyncTrainPanelPacket panel) {
-        return 4 + ROW + 2 + (ROW * 5 + 8) + 3 + 12 + 4 + 18 + 4;
+        int rows = 2; // speed + km/h
+        if (capText(panel) != null)
+            rows++;
+        rows += 3; // power, volt, consist
+        return 4 + 12 + LEVER_H + 3 + 12 + 2 + ROW + 1 + 4 + 16 + 4;
     }
 
     private static void drawLever(GuiGraphics gg, Font font, SyncTrainPanelPacket panel, int x, int y, int w, int h) {
@@ -142,16 +132,16 @@ public class TrainControlHud {
         for (int i = 0; i < order.length; i++) {
             int sy = y + i * slot;
             boolean active = order[i].ordinal() == current;
-            boolean pending = com.george_vi.electroenergetics.client.TrainControlInput.pendingSelection == order[i];
+            boolean pending = TrainControlInput.pendingSelection == order[i];
+            boolean available = !order[i].isTraction() || panel.gearAvailable();
             gg.fill(x, sy, x + w, sy + slot - 1, active ? BG_LIGHT : 0x00000000);
-            gg.fill(x, sy, x + 2, sy + slot - 1, active ? ACCENT : 0x203C4654);
-            int labelColor = active ? ACCENT : pending ? AMBER : TEXT_DIM;
-            String label = labels[i] + (pending ? " *" : "");
-            if (pending)
-                labelColor = AMBER;
+            gg.fill(x, sy, x + 2, sy + slot - 1, active ? ACCENT : pending ? AMBER : 0x203C4654);
+            int labelColor = active ? ACCENT : pending ? AMBER : available ? TEXT_DIM : 0x50333B44;
+            String label = labels[i];
+            if (pending && !active)
+                label += " *";
             gg.drawString(font, label, x + 5, sy + slot / 2 - 4, labelColor, false);
         }
-        // handle
         int handleY = y + current * slot + slot / 2 - 2;
         gg.fill(x + w - 6, handleY - 3, x + w - 1, handleY + 3, ACCENT);
     }
@@ -162,7 +152,6 @@ public class TrainControlHud {
         int bodyW = Math.max(6, (w - (carriages - 1)) / carriages);
         int noseW = Math.max(2, bodyW / 3);
 
-        // head arrow above the leading end
         boolean inverted = panel.cabInverted();
         int headX = inverted ? x + w - bodyW / 2 : x + bodyW / 2;
         gg.fill(headX - 1, y - 4, headX + 1, y - 1, ACCENT);
@@ -174,9 +163,7 @@ public class TrainControlHud {
             boolean last = i == carriages - 1;
             int bx = cx + (first ? noseW : 0);
             int bw = bodyW - (first ? noseW : 0) - (last ? noseW : 0);
-            // body
             gg.fill(bx, y, bx + bw, y + h - 2, BG_LIGHT);
-            // tapered nose (two steps, smooth-ish)
             if (first) {
                 gg.fill(cx + noseW / 2, y + 2, cx + noseW, y + h - 4, BG_LIGHT);
                 gg.fill(cx, y + 4, cx + noseW / 2, y + h - 6, BG_LIGHT);
@@ -186,7 +173,6 @@ public class TrainControlHud {
                 gg.fill(rx, y + 2, rx + noseW / 2, y + h - 4, BG_LIGHT);
                 gg.fill(rx + noseW / 2, y + 4, rx + noseW, y + h - 6, BG_LIGHT);
             }
-            // pantograph glyph on this carriage
             for (SyncTrainPanelPacket.PantographState ps : panel.pantographs()) {
                 if (ps.carriageIndex() != i || ps.railShoe())
                     continue;
@@ -223,11 +209,11 @@ public class TrainControlHud {
     }
 
     private static String capText(SyncTrainPanelPacket panel) {
-        int capKmh = Math.round(panel.capSpeed() * 3.6f / 10f) * 10;
+        int capKmh = Math.round(panel.capSpeed() * 3.6f);
         if (panel.emergencyPenalty() || panel.penaltyActive())
             return String.format("限速 %d km/h", capKmh);
         if (panel.overloaded())
-            return String.format("超载 限速 %d km/h", capKmh);
+            return String.format("超载 限速 100 km/h");
         return null;
     }
 
@@ -239,6 +225,20 @@ public class TrainControlHud {
         if (panel.powerKW() <= 0.5)
             return "功率 0 kW";
         return String.format("功率 %.0f kW", panel.powerKW());
+    }
+
+    /** What the driver should do next, in one line. */
+    private static String hintText(SyncTrainPanelPacket panel) {
+        if (panel.ebActive())
+            return "紧急制动运行中，停止前不可干预";
+        if (panel.controlsLocked())
+            return "锁定中，稍后解锁（限速持续到下一站）";
+        if (panel.mode() == TrainControlMode.DEAD_COAST.ordinal())
+            return "无电：仅 制动/断电 可用，升弓恢复供电";
+        TrainGear gear = TrainGear.values()[Math.floorMod(panel.gear(), TrainGear.values().length)];
+        if (panel.speed() < 0.5f && (gear == TrainGear.COAST || gear == TrainGear.BRAKE))
+            return "↑↓ 选挡 · Enter 发车 · P 升弓";
+        return "↑↓ 选挡 · Enter 挂入 · P 升降弓 · O 自动";
     }
 
     /** The panel belongs to the train the local player drives (sitting in a conductor seat). */

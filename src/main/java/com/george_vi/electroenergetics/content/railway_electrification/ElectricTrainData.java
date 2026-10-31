@@ -55,6 +55,8 @@ public class ElectricTrainData {
     public boolean motorBraking = false;
     /** Motor (regenerative) deceleration actually applied by the last gear-law step [m/s2]. */
     public double regenerativeBrakeAccel = 0d;
+    /** Tractive effort the motors were actually commanded to apply last tick [N]. */
+    public double tractionEffortN = 0d;
 
     // ------------------------------------------------------------------
     // Driver state
