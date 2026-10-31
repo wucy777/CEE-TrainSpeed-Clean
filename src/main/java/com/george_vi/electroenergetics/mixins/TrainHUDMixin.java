@@ -26,7 +26,7 @@ public class TrainHUDMixin {
 
     @WrapOperation(method = "tick",
             at = @At(value = "INVOKE", target = "Lnet/createmod/catnip/config/ConfigBase$ConfigFloat;getF()F", remap = false))
-    private float electroEnergetics$barScale(ConfigBase.ConfigFloat instance, Operation<Float> original) {
+    private static float electroEnergetics$barScale(ConfigBase.ConfigFloat instance, Operation<Float> original) {
         Carriage carriage = getCarriage();
         if (carriage != null && carriage.train != null)
             return ElectricManualSpeed.speedBarFactor(carriage.train, original.call(instance));
