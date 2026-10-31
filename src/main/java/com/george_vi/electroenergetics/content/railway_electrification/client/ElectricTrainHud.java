@@ -32,7 +32,7 @@ public class ElectricTrainHud {
         if (mc.player == null || mc.options.hideGui)
             return;
         SyncTrainPanelPacket panel = TrainControlHud.drivingPanel();
-        if (panel == null) {
+        if (panel == null || panel.mode() == TrainControlMode.CREATE.ordinal()) {
             smoothSpeed = 0;
             return;
         }

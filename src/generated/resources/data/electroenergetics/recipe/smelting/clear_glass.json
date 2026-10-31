@@ -1,7 +1,11 @@
 {
   "type": "minecraft:smelting",
   "category": "misc",
-  "ingredient": "minecraft:glass",
+  "ingredient": [
+    {
+      "item": "minecraft:glass"
+    }
+  ],
   "result": {
     "id": "electroenergetics:clear_glass",
     "count": 1

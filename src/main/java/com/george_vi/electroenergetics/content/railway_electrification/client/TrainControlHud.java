@@ -42,10 +42,20 @@ public class TrainControlHud {
         if (player == null || mc.options.hideGui)
             return;
         SyncTrainPanelPacket panel = drivingPanel();
-        if (panel == null)
-            return;
-
         Font font = mc.font;
+        if (panel == null)
+            return; // not driving / no data
+
+        if (panel.mode() == TrainControlMode.CREATE.ordinal()) {
+            // Seated on an electric train but handed to Create (D-05): one line of
+            // feedback so the missing panel is a state, not a mystery.
+            int hx = TrainControlLayout.rightPanelX(gg, 150);
+            int hy = gg.guiHeight() - TrainControlLayout.MARGIN - 10;
+            gg.fill(hx - 3, hy - 2, hx + 152, hy + 10, BG);
+            gg.drawString(font, "联控中（W/S 驾驶）· 升弓恢复电动面板", hx, hy, 0xFF8C97A3, false);
+            return;
+        }
+
         int x = TrainControlLayout.rightPanelX(gg, PANEL_W);
         int y = gg.guiHeight() - panelHeight(panel) - TrainControlLayout.MARGIN;
 
@@ -249,11 +259,7 @@ public class TrainControlHud {
             return null;
         if (cce.getCarriage() == null || cce.getCarriage().train == null)
             return null;
-        var panel = com.george_vi.electroenergetics.content.railway_electrification.ClientTrainPanel.get(cce.getCarriage().train.id);
-        if (panel == null)
-            return null;
-        if (panel.mode() == TrainControlMode.CREATE.ordinal())
-            return null; // Create HUD takes over (D-05)
-        return panel;
+        // Returned even in CREATE mode: callers decide what each mode renders.
+        return com.george_vi.electroenergetics.content.railway_electrification.ClientTrainPanel.get(cce.getCarriage().train.id);
     }
 }
