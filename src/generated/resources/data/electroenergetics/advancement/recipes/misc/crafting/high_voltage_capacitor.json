@@ -1,0 +1,32 @@
+{
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_capacitor": {
+      "conditions": {
+        "items": [
+          {
+            "items": "electroenergetics:capacitor"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    },
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "electroenergetics:crafting/high_voltage_capacitor"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_capacitor"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "electroenergetics:crafting/high_voltage_capacitor"
+    ]
+  }
+}

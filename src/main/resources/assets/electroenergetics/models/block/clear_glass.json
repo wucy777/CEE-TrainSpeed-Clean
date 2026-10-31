@@ -1,0 +1,6 @@
+{
+  "parent": "minecraft:block/transparent",
+  "textures": {
+    "all": "electroenergetics:block/clear_glass"
+  }
+}

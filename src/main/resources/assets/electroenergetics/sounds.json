@@ -1,0 +1,278 @@
+{
+  "hum": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:hum"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.hum"
+  },
+  "short_arc": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:short_arc"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.arcing"
+  },
+  "mcb_close": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:mcb_close"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.mcb_close"
+  },
+  "mcb_trip": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:mcb_trip"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.mcb_trip"
+  },
+  "contact_close": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:mcb_close"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.contact_close"
+  },
+  "contact_open": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:mcb_trip"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.contact_open"
+  },
+  "arc": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:arc"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.arcing"
+  },
+  "voltage_regulator": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:voltage_regulator"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.voltage_regulator"
+  },
+  "electric_train": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:electric_train"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "electric_train_background": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:electric_train_background"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "dc_train": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:dc_train"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train_relay": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train_relay"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.train_relay"
+  },
+  "dc_train_start": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:dc_train_start"
+      }
+    ]
+  },
+  "buzzer": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:buzzer"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.buzzer"
+  },
+  "sulfur_hexafluoride_breaker_trip": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:sulfur_hexafluoride_breaker_trip"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.sulfur_hexafluoride_breaker_trip"
+  },
+
+  "train/background/wind_rise": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/background/wind_rise"
+      }
+    ]
+  },
+  "train/background/wind_static": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/background/wind_static"
+      }
+    ]
+  },
+  "train/gto/async": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/async"
+      }
+    ]
+  },
+  "train/gto/async_rise": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/async_rise"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/async_decay": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/async_decay"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/igbt/async": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/igbt/async"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/igbt/async_decay": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/igbt/async_decay"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/igbt/async_decay2": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/igbt/async_decay2"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/igbt/async_start": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/igbt/async_start"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p1": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p1"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p3": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p3"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p5": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p5"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p7": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p7"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p9": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p9"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p11": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p11"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  },
+  "train/gto/p15": {
+    "sounds": [
+      {
+        "type": "file",
+        "name": "electroenergetics:train/gto/p15"
+      }
+    ],
+    "subtitle": "electroenergetics.subtitle.electric_train"
+  }
+}

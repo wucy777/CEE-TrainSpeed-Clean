@@ -1,0 +1,127 @@
+package com.george_vi.electroenergetics.foundation.device;
+
+import com.george_vi.electroenergetics.CEEItems;
+import com.george_vi.electroenergetics.config.CEEConfigs;
+import com.george_vi.electroenergetics.devices.device.DeviceBlock;
+import com.george_vi.electroenergetics.devices.device.SimulatedDevice;
+import com.george_vi.electroenergetics.foundation.nodes.InWorldNodeConnection;
+import com.george_vi.electroenergetics.simulation.infrastructure.InWorldNodeData;
+import com.george_vi.electroenergetics.simulation.infrastructure.InfrastructureSavedData;
+import com.george_vi.electroenergetics.simulation.infrastructure.WireData;
+import com.simibubi.create.content.equipment.wrench.IWrenchable;
+import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.MutableComponent;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.world.InteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.UseOnContext;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.phys.Vec3;
+
+import javax.annotation.Nullable;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+
+public interface ElectricalDeviceBlock<T extends SimulatedDevice> extends DeviceBlock<T> {
+    /**
+     * This is used get all nodes, their positions and IDs (block-local)
+     * @return map of positions (relative to the bottom corner of the block) and node IDs (block-local)
+     */
+    Map<Integer, Vec3> getNodePositions(Level level, BlockPos pos, BlockState state);
+
+    /**
+     * This is used to get the position of a specific node
+     * @param id ID of the node (block-local)
+     * @return position of the node (relative to the bottom corner of the block)
+     */
+    @Nullable
+    Vec3 getNodePosition(Level level, BlockPos pos, BlockState state, int id);
+
+    /**
+     * This is used to know if these nodes can be connected
+     * @param id1 ID of the first node (block-local)
+     * @param id2 ID of the second node (block-local)
+     * @return Whether these nodes can be connected
+     */
+    default boolean canSelfConnect(Level level, BlockPos pos, BlockState state, int id1, int id2) {
+        return false;
+    }
+
+    /**
+     * This is used to get the label of a specific node
+     * @param id ID of the node (block-local)
+     * @return component
+     */
+    default MutableComponent getNodeLabel(Level level, BlockPos pos, BlockState state, int id) {
+        return Component.translatable("electroenergetics.nodes.node");
+    }
+
+    /**
+     * This is used to get the size of a node. Primarily used for the outline and hitboxes.
+     * @param id ID of the node (block-local)
+     * @return node hitbox size
+     */
+    default float getNodeSize(Level level, BlockPos pos, BlockState state, int id) {
+        return 4/16f;
+    }
+
+    /**
+     * Should an insulator rendered on the wire connected to a specific node
+     * @param id ID of the node (block-local)
+     * @return Whether an insulator should be rendered on the wire
+     */
+    default boolean isOuterInsulator(Level level, BlockPos pos, BlockState state, int id) {
+        return false;
+    }
+
+    /**
+     * @param id ID of the node (block-local)
+     * @return Whether the node can be accessed by the player, or is handled internally.
+     */
+    default boolean isNodeAccessible(Level level, BlockPos pos, BlockState state, int id) {
+        return true;
+    }
+
+    default void ensureNodesExist(ServerLevel level, BlockPos pos, BlockState state) {
+        List<Integer> nodes = new ArrayList<>(getNodePositions(level, pos, state).keySet());
+
+        InfrastructureSavedData sd = InfrastructureSavedData.load(level);
+        sd.registerOrUpdateNodes(pos, nodes);
+    }
+
+    /**
+     * Automatically puts broken wires in the inventory, or spool them if possible.
+     */
+    default void removeWiresByPlayer(Player player, Level level, BlockPos pos) {
+        if (!(level instanceof ServerLevel sl) || player == null)
+            return;
+
+        InfrastructureSavedData sd = InfrastructureSavedData.load(sl);
+        for (InWorldNodeData nodeData : sd.getNodesAt(pos))
+            for (InWorldNodeConnection connection : sd.getConnections(nodeData)) {
+                WireData wireData = sd.removeConnection(connection);
+
+                if (CEEConfigs.server().alternateWirePlacement.get()) {
+                    player.getInventory().placeItemBackInInventory(wireData.wireType().getSpooledItem().getDefaultInstance());
+                } else {
+                    boolean found = false;
+                    for (int i = 0; i < player.getInventory().items.size(); i++) {
+                        ItemStack stack = player.getInventory().items.get(i);
+                        if (CEEItems.EMPTY_SPOOL.isIn(stack)) {
+                            stack.shrink(1);
+                            player.getInventory().placeItemBackInInventory(wireData.wireType().getSpooledItem().getDefaultInstance());
+                            found = true;
+                            break;
+                        }
+                    }
+                    if (!found)
+                        player.getInventory().placeItemBackInInventory(new ItemStack(wireData.wireType().getDrops(), CEEConfigs.server().wiresPerSpool.get()));
+                }
+            }
+        return;
+    }
+}

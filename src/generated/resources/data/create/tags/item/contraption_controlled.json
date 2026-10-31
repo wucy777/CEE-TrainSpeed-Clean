@@ -1,0 +1,8 @@
+{
+  "values": [
+    "electroenergetics:ammeter",
+    "electroenergetics:voltmeter",
+    "electroenergetics:pantograph",
+    "electroenergetics:rail_contact_shoe"
+  ]
+}

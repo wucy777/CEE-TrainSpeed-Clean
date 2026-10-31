@@ -1,0 +1,27 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "tag": "c:nuggets/copper"
+    },
+    "S": {
+      "item": "create:shaft"
+    },
+    "T": {
+      "tag": "minecraft:terracotta"
+    },
+    "c": {
+      "item": "minecraft:coal"
+    }
+  },
+  "pattern": [
+    " S ",
+    "TcT",
+    "CCC"
+  ],
+  "result": {
+    "count": 1,
+    "id": "electroenergetics:potentiometer"
+  }
+}

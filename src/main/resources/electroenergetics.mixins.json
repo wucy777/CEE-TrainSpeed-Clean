@@ -1,0 +1,50 @@
+{
+  "required": true,
+  "minVersion": "0.8",
+  "priority": 1234,
+  "package": "com.george_vi.electroenergetics.mixins",
+  "refmap": "electroenergetics.refmap.json",
+  "compatibilityLevel": "JAVA_21",
+  "plugin": "com.george_vi.electroenergetics.CEEMixinPlugin",
+  "client": [
+    "CarriageSoundsMixin",
+    "ControlsMovementBehaviourMixin",
+    "KeyboardHandlerMixin",
+    "TrainHUDMixin",
+    "ControlsMovementBehaviourMixin",
+    "TrainHUDMixin",
+    "HumanoidModelMixin",
+    "ItemInHandRendererMixin",
+    "LevelRendererAccessor",
+    "MouseHandlerMixin",
+    "MultiPlayerGameModeMixin",
+    "SchematicRendererMixin"
+  ],
+  "injectors": {
+    "defaultRequire": 1
+  },
+  "mixins": [
+    "BlockStateBaseMixin",
+    "CarriageChunkProbeMixin",
+    "CarriageFloorMixin",
+    "CarriageContraptionEntityMixin",
+    "RiderDismountLockMixin",
+    "RiderStopRidingLockMixin",
+    "TeleportPendingAccessor",
+    "CarriageContraptionEntityMixin",
+    "RiderDismountLockMixin",
+    "CarriageContraptionMixin",
+    "CarriageMixin",
+    "ComparatorBlockMixin",
+    "FluidPropagatorMixin",
+    "LevelChunkMixin",
+    "LivingEntityMixin",
+    "MinecraftServerMixin",
+    "SchematicLevelMixin",
+    "SchematicPrinterMixin",
+    "StructureTemplateMixin",
+    "SubLevelAssemblyHelperMixin",
+    "TrainMixin",
+    "compat.ElectricFanBlockEntityMixin"
+  ]
+}

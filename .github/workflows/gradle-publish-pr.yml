@@ -1,0 +1,45 @@
+name: PR AutoBuild
+
+on:
+  pull_request:
+    branches: [ "1.21.1" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@11d4d83c63a6ce61b32d8a9c4faddbdb04fe9917 # v6
+      with:
+        cache-provider: enhanced
+        cache-read-only: true
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
+    - name: Update version number
+      run: |
+        PROPERTY="mod_version"
+        OLD_VALUE=$(grep "^$PROPERTY=" gradle.properties | cut -d'=' -f2)
+        NEW_VALUE="${OLD_VALUE}-pr-${{ github.run_number }}"
+        sed -i "s/^$PROPERTY=.*/$PROPERTY=$NEW_VALUE/" gradle.properties
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        path: build/libs

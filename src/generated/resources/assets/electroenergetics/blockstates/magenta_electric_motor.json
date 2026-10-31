@@ -1,0 +1,160 @@
+{
+  "variants": {
+    "facing=down,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 180
+    },
+    "facing=east,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90
+    },
+    "facing=south,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor"
+    },
+    "facing=up,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll"
+    },
+    "facing=up,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor"
+    },
+    "facing=up,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll"
+    },
+    "facing=up,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor"
+    },
+    "facing=up,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll"
+    },
+    "facing=west,logged_state=dry,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,roll=false": {
+      "model": "electroenergetics:block/magenta_electric_motor",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,roll=true": {
+      "model": "electroenergetics:block/magenta_electric_motor_roll",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

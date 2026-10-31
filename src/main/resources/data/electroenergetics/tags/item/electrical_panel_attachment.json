@@ -1,0 +1,24 @@
+{
+  "values": [
+    "electroenergetics:ammeter",
+    "electroenergetics:voltmeter",
+    "electroenergetics:energy_meter",
+    "electroenergetics:tri_polar_energy_meter",
+    "electroenergetics:cut_off_switch",
+    "electroenergetics:emergency_stop_button",
+    "electroenergetics:momentary_switch",
+    "electroenergetics:indicator_bulb",
+    "electroenergetics:miniature_circuit_breaker",
+    "electroenergetics:transformer",
+    "electroenergetics:electric_fan",
+
+    "create:analog_lever",
+    "create:turntable",
+    "create:hand_crank",
+
+    { "id": "simulated:altitude_sensor", "required": false },
+    { "id": "simulated:velocity_sensor", "required": false },
+    "electroenergetics:synchroscope",
+    "electroenergetics:frequency_meter"
+  ]
+}

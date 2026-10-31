@@ -1,0 +1,30 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "B": {
+      "item": "minecraft:iron_bars"
+    },
+    "C": {
+      "item": "electroenergetics:connector"
+    },
+    "M": {
+      "item": "create:propeller"
+    },
+    "R": {
+      "item": "electroenergetics:commutator"
+    },
+    "c": {
+      "item": "electroenergetics:copper_wire_spool"
+    }
+  },
+  "pattern": [
+    "Cc ",
+    "RMB",
+    "Cc "
+  ],
+  "result": {
+    "count": 1,
+    "id": "electroenergetics:electric_fan"
+  }
+}

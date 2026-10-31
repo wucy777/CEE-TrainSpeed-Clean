@@ -1,0 +1,50 @@
+package com.george_vi.electroenergetics.events.datagen;
+
+import com.george_vi.electroenergetics.*;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.api.data.recipe.MechanicalCraftingRecipeGen;
+import net.minecraft.core.HolderLookup;
+import net.minecraft.data.PackOutput;
+import net.minecraft.world.item.Items;
+import net.neoforged.neoforge.common.Tags;
+
+import java.util.concurrent.CompletableFuture;
+
+public class CEEMechanicalCraftingRecipeGen extends MechanicalCraftingRecipeGen {
+
+    GeneratedRecipe
+
+    LINEMANS_STICK = create(CEEItems.LINEMANS_STICK::get)
+            .recipe(b -> b
+                    .key('N', CEETags.IRON_NUGGET)
+                    .key('R', AllItems.PRECISION_MECHANISM.get())
+                    .key('H', AllItems.BRASS_HAND.get())
+                    .key('S', Tags.Items.RODS_WOODEN)
+                    .key('D', Items.RED_DYE)
+                    .patternLine("NRH")
+                    .patternLine(" S ")
+                    .patternLine(" S ")
+                    .patternLine(" S ")
+                    .patternLine(" D ")
+                    .disallowMirrored()),
+
+    SF6_BREAKER = create(CEEBlocks.SF6_BREAKER::get)
+            .recipe(b -> b
+                    .key('C', CEEBlocks.CONNECTOR)
+                    .key('P', AllItems.PRECISION_MECHANISM.get())
+                    .key('S', CEEFluids.TRANSFORMER_OIL.getBucket().orElseThrow())
+                    .key('s', CEETags.IRON_PLATE)
+                    .key('I', CEEBlocks.INSULATOR)
+                    .patternLine("sCs")
+                    .patternLine(" I ")
+                    .patternLine(" S ")
+                    .patternLine(" P ")
+                    .patternLine("sCs")
+                    .disallowMirrored());
+
+    public CEEMechanicalCraftingRecipeGen(PackOutput output, CompletableFuture<HolderLookup.Provider> registries) {
+        super(output, registries, CreateElectroEnergetics.ID);
+    }
+
+
+}

@@ -1,0 +1,109 @@
+{
+  "type": "create:sequenced_assembly",
+  "ingredient": {
+    "item": "electroenergetics:transformer_core_lamination"
+  },
+  "results": [
+    {
+      "id": "electroenergetics:transformer_core"
+    }
+  ],
+  "sequence": [
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        },
+        {
+          "item": "electroenergetics:transformer_core_lamination"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        },
+        {
+          "item": "electroenergetics:transformer_core_lamination"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        },
+        {
+          "item": "electroenergetics:transformer_core_lamination"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    },
+    {
+      "type": "create:pressing",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        },
+        {
+          "item": "electroenergetics:copper_wire_spool"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    },
+    {
+      "type": "create:deploying",
+      "ingredients": [
+        {
+          "item": "electroenergetics:incomplete_transformer_core"
+        },
+        {
+          "item": "electroenergetics:copper_wire_spool"
+        }
+      ],
+      "results": [
+        {
+          "id": "electroenergetics:incomplete_transformer_core"
+        }
+      ]
+    }
+  ],
+  "transitional_item": {
+    "id": "electroenergetics:incomplete_transformer_core"
+  }
+}

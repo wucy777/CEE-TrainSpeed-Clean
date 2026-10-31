@@ -1,0 +1,24 @@
+{
+  "type": "minecraft:crafting_shaped",
+  "category": "misc",
+  "key": {
+    "C": {
+      "item": "electroenergetics:connector"
+    },
+    "S": {
+      "tag": "c:plates/iron"
+    },
+    "c": {
+      "item": "electroenergetics:capacitor"
+    }
+  },
+  "pattern": [
+    "CSC",
+    "ccc",
+    "ccc"
+  ],
+  "result": {
+    "count": 1,
+    "id": "electroenergetics:high_voltage_capacitor"
+  }
+}

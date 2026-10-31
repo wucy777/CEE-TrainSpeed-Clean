@@ -1,0 +1,628 @@
+{
+  "variants": {
+    "facing=down,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 180
+    },
+    "facing=down,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 180
+    },
+    "facing=down,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 180
+    },
+    "facing=down,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 180
+    },
+    "facing=east,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 90
+    },
+    "facing=east,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 90
+    },
+    "facing=north,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90
+    },
+    "facing=north,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90
+    },
+    "facing=north,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90
+    },
+    "facing=north,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90
+    },
+    "facing=south,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 180
+    },
+    "facing=south,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 180
+    },
+    "facing=up,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger"
+    },
+    "facing=up,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long"
+    },
+    "facing=up,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger"
+    },
+    "facing=up,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=up,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block"
+    },
+    "facing=up,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger"
+    },
+    "facing=up,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short"
+    },
+    "facing=up,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=up,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger"
+    },
+    "facing=up,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long"
+    },
+    "facing=up,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger"
+    },
+    "facing=up,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=up,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block"
+    },
+    "facing=up,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger"
+    },
+    "facing=up,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short"
+    },
+    "facing=up,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=up,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger"
+    },
+    "facing=up,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long"
+    },
+    "facing=up,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger"
+    },
+    "facing=up,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=up,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block"
+    },
+    "facing=up,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger"
+    },
+    "facing=up,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short"
+    },
+    "facing=up,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer"
+    },
+    "facing=west,logged_state=dry,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=dry,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=oillogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=hanger": {
+      "model": "electroenergetics:block/connector/block_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=long": {
+      "model": "electroenergetics:block/connector/block_long",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=long_hanger": {
+      "model": "electroenergetics:block/connector/block_long_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=outer": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=short": {
+      "model": "electroenergetics:block/connector/block",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=short_hanger": {
+      "model": "electroenergetics:block/connector/block_short_hanger",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=shorter": {
+      "model": "electroenergetics:block/connector/block_short",
+      "x": 90,
+      "y": 270
+    },
+    "facing=west,logged_state=waterlogged,style=uninsulated": {
+      "model": "electroenergetics:block/connector/block_outer",
+      "x": 90,
+      "y": 270
+    }
+  }
+}

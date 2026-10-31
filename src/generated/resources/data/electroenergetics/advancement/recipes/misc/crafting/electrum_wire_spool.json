@@ -1,0 +1,41 @@
+{
+  "neoforge:conditions": [
+    {
+      "type": "neoforge:not",
+      "value": {
+        "type": "neoforge:tag_empty",
+        "tag": "c:nuggets/electrum"
+      }
+    }
+  ],
+  "parent": "minecraft:recipes/root",
+  "criteria": {
+    "has_the_recipe": {
+      "conditions": {
+        "recipe": "electroenergetics:crafting/electrum_wire_spool"
+      },
+      "trigger": "minecraft:recipe_unlocked"
+    },
+    "has_wires/electrum": {
+      "conditions": {
+        "items": [
+          {
+            "items": "#c:wires/electrum"
+          }
+        ]
+      },
+      "trigger": "minecraft:inventory_changed"
+    }
+  },
+  "requirements": [
+    [
+      "has_the_recipe",
+      "has_wires/electrum"
+    ]
+  ],
+  "rewards": {
+    "recipes": [
+      "electroenergetics:crafting/electrum_wire_spool"
+    ]
+  }
+}

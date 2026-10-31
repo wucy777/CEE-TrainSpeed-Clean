@@ -1,0 +1,101 @@
+name: CEE AutoBuild
+
+on:
+  push:
+    branches: [ "1.21.1" ]
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+    - name: Set up JDK 17
+      uses: actions/setup-java@v4
+      with:
+        java-version: '17'
+        distribution: 'temurin'
+
+    - name: Setup Gradle
+      uses: gradle/actions/setup-gradle@11d4d83c63a6ce61b32d8a9c4faddbdb04fe9917 # v6
+      with:
+        cache-provider: enhanced
+
+    - name: Make gradlew executable
+      run: chmod +x ./gradlew
+
+    - name: Update version number
+      id: version_update
+      run: |
+          PROPERTY="mod_version"
+          OLD_VALUE=$(grep "^$PROPERTY=" gradle.properties | cut -d'=' -f2)
+          NEW_VALUE="${OLD_VALUE}-${{ github.run_number }}"
+          sed -i "s/^$PROPERTY=.*/$PROPERTY=$NEW_VALUE/" gradle.properties
+          echo "version=$NEW_VALUE" >> "$GITHUB_OUTPUT"
+
+    - name: Build with Gradle Wrapper
+      run: ./gradlew build
+
+    - name: Upload build artifacts
+      uses: actions/upload-artifact@v4
+      with:
+        name: Package
+        path: build/libs
+
+  release:
+    runs-on: ubuntu-latest
+    needs: build
+    permissions:
+      contents: write
+
+    steps:
+    - uses: actions/checkout@v4
+      with:
+        fetch-depth: 0
+
+    - name: Generate release notes
+      run: |
+        PREVIOUS_TAG=$(git describe --tags --abbrev=0 HEAD^ 2>/dev/null || echo "")
+        
+        {
+        echo "> [!CAUTION]"
+        echo "> These builds are auto generated on every commit. There is no guarantee these will be stable."
+        echo "> It is recommended to do a backup of your worlds before adding or updating the mod."
+        echo "**Changes:**"
+        echo
+        if [ -z "$PREVIOUS_TAG" ]; then
+          git --no-pager log --pretty=format:"**%s** ([%h](${{ github.server_url }}/${GITHUB_REPOSITORY}/commit/%H)) %n%b"
+        else
+          git --no-pager log "$PREVIOUS_TAG"..HEAD --pretty=format:"**%s** ([%h](${{ github.server_url }}/${GITHUB_REPOSITORY}/commit/%H)) %n%b"
+        fi
+        } > RELEASE_NOTES.md
+
+    - name: Create tag for release and generate release notes
+      run: |
+        git config user.name "github-actions"
+        git config user.email "github-actions@github.com" 
+        git tag autobuild-${{ github.run_number }}
+        git push origin autobuild-${{ github.run_number }}
+
+    - name: Download build artifacts
+      uses: actions/download-artifact@v4
+      with:
+        name: Package
+        path: build/libs
+
+    - name: Create GitHub Release
+      uses: softprops/action-gh-release@v1
+      with:
+        tag_name: autobuild-${{ github.run_number }}
+        name: Auto Release ${{ github.run_number }}
+        body_path: RELEASE_NOTES.md
+        draft: false
+        prerelease: true
+        files: build/libs/*.jar
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

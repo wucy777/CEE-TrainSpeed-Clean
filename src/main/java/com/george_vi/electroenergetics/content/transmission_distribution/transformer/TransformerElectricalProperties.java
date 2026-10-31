@@ -1,0 +1,57 @@
+package com.george_vi.electroenergetics.content.transmission_distribution.transformer;
+
+import com.george_vi.electroenergetics.foundation.nodes.DirectionalNodeConnection;
+import com.george_vi.electroenergetics.simulation.electrical_properties.CoupledProperties;
+import com.george_vi.electroenergetics.simulation.electrical_properties.ElectricalProperties;
+
+public class TransformerElectricalProperties extends ElectricalProperties implements CoupledProperties {
+    final DirectionalNodeConnection primaryNodes;
+    final DirectionalNodeConnection secondaryNodes;
+    final double ratio;
+    final boolean isPrimary;
+
+    private TransformerElectricalProperties(double ratio, DirectionalNodeConnection primaryNodes, DirectionalNodeConnection secondaryNodes, boolean isPrimary) {
+        this.primaryNodes = primaryNodes;
+        this.secondaryNodes = secondaryNodes;
+        this.ratio = ratio;
+        this.isPrimary = isPrimary;
+    }
+
+    public TransformerElectricalProperties(double ratio, DirectionalNodeConnection primaryNodes, DirectionalNodeConnection secondaryNodes) {
+        this(ratio, primaryNodes, secondaryNodes, true);
+    }
+
+    public TransformerElectricalProperties getOtherProperties() {
+        return new TransformerElectricalProperties(ratio, secondaryNodes, primaryNodes, false);
+    }
+
+    @Override
+    public DirectionalNodeConnection nodes() {
+        return primaryNodes;
+    }
+
+    @Override
+    public DirectionalNodeConnection coupledNodes() {
+        return secondaryNodes;
+    }
+
+    @Override
+    public double ratio() {
+        return ratio;
+    }
+
+    @Override
+    public boolean isPrimary() {
+        return isPrimary;
+    }
+
+    @Override
+    public double resistance() {
+        return 1e+8d;
+    }
+
+    @Override
+    public byte dissolveMode() {
+        return CANT_DISSOLVE;
+    }
+}

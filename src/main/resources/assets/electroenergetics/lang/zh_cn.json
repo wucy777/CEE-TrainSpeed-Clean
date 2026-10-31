@@ -1,0 +1,21 @@
+{
+ "electroenergetics.riders.overloaded": "超载：座位不足，列车限速 100 km/h",
+ "electroenergetics.riders.seated_forced": "已被自动安排入座",
+ "electroenergetics.riders.dismount_locked": "车速超过落座门槛，无法离开座位",
+ "electroenergetics.riders.overload_cleared": "超载解除，限速取消",
+ "electroenergetics.pantograph.no_wire": "该受电弓接触范围内没有接触网",
+ "electroenergetics.pantograph.locked": "紧急制动锁定，到下一站前禁止升弓",
+ "electroenergetics.pantograph.auto_controlled": "该受电弓已开启自动升弓，请先关闭",
+ "key.categories.electroenergetics.train": "电气化列车操纵台",
+ "key.electroenergetics.vigilance_confirm": "警惕确认（J）",
+ "key.electroenergetics.engage": "挂入所选挡位（Enter）",
+ "key.electroenergetics.emergency_brake": "紧急制动（K）",
+ "key.electroenergetics.gear_up": "挡位向上选择",
+ "key.electroenergetics.gear_down": "挡位向下选择",
+ "key.electroenergetics.pantograph_next": "选择下一组受电弓",
+ "key.electroenergetics.pantograph_prev": "选择上一组受电弓",
+ "key.electroenergetics.pantograph_toggle": "升降所选受电弓",
+ "key.electroenergetics.pantograph_auto": "切换所选受电弓自动升弓",
+ "block.electroenergetics.clear_glass": "无边框通透玻璃",
+ "block.electroenergetics.clear_glass.tooltip.summary": "无边框通透玻璃。如果你放下它然后忘记它，也许以后有一天它会成为你的“绊脚石”"
+}

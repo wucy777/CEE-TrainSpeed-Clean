@@ -1,0 +1,230 @@
+package com.george_vi.electroenergetics.simulation;
+
+import com.george_vi.electroenergetics.foundation.nodes.DirectionalNodeConnection;
+import com.george_vi.electroenergetics.foundation.nodes.InWorldNode;
+import com.george_vi.electroenergetics.foundation.nodes.Node;
+import com.george_vi.electroenergetics.simulation.electrical_properties.ElectricalProperties;
+import com.george_vi.electroenergetics.simulation.infrastructure.InfrastructureSavedData;
+import it.unimi.dsi.fastutil.ints.IntSet;
+import net.minecraft.core.BlockPos;
+
+import java.util.ArrayList;
+import java.util.List;
+
+
+public class SimulationResults {
+    double[] voltages;
+    double[] rmsVoltages;
+    public CircuitBuilder circuitBuilder;
+    InfrastructureSavedData sd;
+    final int microTicks;
+
+    public SimulationResults(double[] voltages, int microTicks, CircuitBuilder circuitBuilder, InfrastructureSavedData sd) {
+        this.voltages = voltages;
+        this.circuitBuilder = circuitBuilder;
+        this.sd = sd;
+        this.microTicks = microTicks;
+
+        if (microTicks == 1) {
+            rmsVoltages = voltages;
+            for (int i = 0; i < rmsVoltages.length; i++)
+                circuitBuilder.allIndexedNodes.get(i).rmsVoltage = rmsVoltages[i];
+
+            return;
+        }
+
+        rmsVoltages = new double[voltages.length / microTicks];
+
+        for (int i = 0; i * microTicks < voltages.length; i++) {
+            double rms = 0;
+            for (int j = 0; j < microTicks; j++) {
+                double v = voltages[(i * microTicks) + j];
+                rms += v * v;
+            }
+            rms /= microTicks;
+            rms = Math.sqrt(rms);
+            if (rms != 0)
+                rmsVoltages[i] = rms;
+        }
+
+        for (int i = 0; i < rmsVoltages.length; i++)
+            circuitBuilder.allIndexedNodes.get(i).rmsVoltage = rmsVoltages[i];
+    }
+
+    public InfrastructureSavedData getSD() {
+        return sd;
+    }
+
+    public double getVoltageAt(Node node) {
+        int nodeID = circuitBuilder.nodeIndexes.getInt(node);
+        if (nodeID == -1)
+            return 0;
+        return getVoltageAt(nodeID);
+    }
+
+    public double getVoltageAt(int nodeID) {
+        return rmsVoltages[nodeID];
+    }
+
+    public double getVoltageAt(BlockPos pos, int id) {
+        return getVoltageAt(new InWorldNode(id, pos));
+    }
+
+    public double getCurrentThrough(Node node1, Node node2) {
+        DirectionalNodeConnection fc = connectionBetween(node1, node2);
+        node1 = fc.node1();
+        node2 = fc.node2();
+
+        ElectricalProperties properties = circuitBuilder.getConnectionProperties(node1, node2);
+        if (properties == null || properties.resistance() == 0)
+            return 0;
+        if (properties.isCurrentSource()) {
+            if (microTicks == 1)
+                return getVoltageAt(node1, node2) / properties.resistance() - properties.currentSource();
+            int nodeId1 = circuitBuilder.nodeIndexes.getInt(node1);
+            int nodeId2 = circuitBuilder.nodeIndexes.getInt(node2);
+            if (nodeId1 == -1 || nodeId2 == -1)
+                return 0;
+            int id1 = nodeId1 * microTicks;
+            int id2 = nodeId2 * microTicks;
+            double rms = 0;
+            for (int j = 0; j < microTicks; j++)
+                rms += (voltages[id1+j] - voltages[id2+j]) / properties.resistance() - properties.currentSource();
+            rms /= microTicks;
+            return rms;
+        }
+        return getVoltageAt(node1, node2) / properties.resistance();
+    }
+
+    public double getCurrentThrough(BlockPos pos, int id1, int id2) {
+        return getCurrentThrough(new InWorldNode(id1, pos), new InWorldNode(id2, pos));
+    }
+
+    public double getHeatLoss(BlockPos pos, int id1, int id2) {
+        return getHeatLoss(new InWorldNode(id1, pos), new InWorldNode(id2, pos));
+    }
+
+    public double getHeatLoss(Node node1, Node node2) {
+        double current = getCurrentThrough(node1, node2);
+        ElectricalProperties properties = circuitBuilder.getConnectionProperties(node1, node2);
+        if (current == 0 || properties == null || properties.resistance() == 0 || properties.currentSource() != 0 || properties.voltageSource() != 0)
+            return 0;
+
+        return current * current * properties.resistance();
+    }
+
+    DirectionalNodeConnection connectionBetween(Node node1, Node node2) {
+
+        // the reason this is here, is when a device creates a non-ideal voltage source, it adds a node in the middle.
+        // this just returns the real connection, so that the device doesn't have to worry about these nodes.
+        int nodeId1 = circuitBuilder.nodeIndexes.getInt(node1);
+        int nodeId2 = circuitBuilder.nodeIndexes.getInt(node2);
+        if (nodeId1 == -1 || nodeId2 == -1)
+            return new DirectionalNodeConnection(node1, node2);
+
+        SimulationNode indexedNode1 = circuitBuilder.getNode(nodeId1);
+        SimulationNode indexedNode2 = circuitBuilder.getNode(nodeId2);
+        if (indexedNode1.adjacency.containsKey(indexedNode2.ordinal))
+            return new DirectionalNodeConnection(node1, node2);
+
+        IntSet node1connections = indexedNode1.adjacency.keySet();
+        IntSet node2connections = indexedNode2.adjacency.keySet();
+
+        List<Node> nodesInTheMiddle = new ArrayList<>();
+        for (int node1connection : node1connections) {
+            for (int node2connection : node2connections) {
+                if (node1connection == node2connection)
+                    nodesInTheMiddle.add(circuitBuilder.allIndexedNodes.get(node1connection).node);
+            }
+        }
+        if (nodesInTheMiddle.size() == 1)
+            return new DirectionalNodeConnection(node1, nodesInTheMiddle.getFirst());
+        return new DirectionalNodeConnection(node1, node2);
+    }
+
+    public double getVoltageAtSqr(BlockPos pos, int n1, int n2) {
+        return getVoltageAtSqr(new InWorldNode(n1, pos), new InWorldNode(n2, pos));
+    }
+
+    public double getVoltageAt(BlockPos pos, int n1, int n2) {
+        return getVoltageAt(new InWorldNode(n1, pos), new InWorldNode(n2, pos));
+    }
+
+    public double getVoltageAt(Node n1, Node n2) {
+        if (microTicks == 1) {
+            int nodeId1 = circuitBuilder.nodeIndexes.getInt(n1);
+            int nodeId2 = circuitBuilder.nodeIndexes.getInt(n2);
+            if (nodeId1 == -1 || nodeId2 == -1)
+                return 0;
+            return voltages[nodeId1] - voltages[nodeId2];
+        }
+        return Math.sqrt(getVoltageAtSqr(n1, n2));
+    }
+
+    public double getVoltageAt(int nodeId1, int nodeId2) {
+        if (microTicks == 1)
+            return voltages[nodeId1] - voltages[nodeId2];
+        return Math.sqrt(getVoltageAtSqr(nodeId1, nodeId2));
+    }
+
+    public double getVoltageAtSqr(Node n1, Node n2) {
+        int nodeId1 = circuitBuilder.nodeIndexes.getInt(n1);
+        int nodeId2 = circuitBuilder.nodeIndexes.getInt(n2);
+        return getVoltageAtSqr(nodeId1, nodeId2);
+    }
+
+    public double getVoltageAtSqr(int nodeId1, int nodeId2) {
+        if (nodeId1 < 0 || nodeId2 < 0)
+            return 0;
+        int id1 = nodeId1 * microTicks;
+        int id2 = nodeId2 * microTicks;
+        if (microTicks == 1) {
+            double v = voltages[id1] - voltages[id2];
+            return v * v;
+        }
+
+        double rms = 0;
+        for (int j = 0; j < microTicks; j++) {
+            double v1 = voltages[id1 + j];
+            double v2 = voltages[id2 + j];
+            rms += (v1 - v2) * (v1 - v2);
+        }
+        rms /= microTicks;
+        return rms;
+    }
+
+    public double[] getVoltages(Node n1) {
+        int nodeID = circuitBuilder.nodeIndexes.getInt(n1);
+        if (nodeID == -1)
+            return new double[0];
+        int id = nodeID * microTicks;
+        double[] r = new double[microTicks];
+        System.arraycopy(voltages, id, r, 0, microTicks);
+        return r;
+    }
+
+    /**
+     * Copies all the voltages at this game-tick for this node into the specified array. If it's invalid, creates a new one.
+     */
+    public double[] getVoltages(Node n1, double[] toFill) {
+        if (toFill == null || toFill.length != microTicks)
+            toFill = new double[microTicks];
+        int nodeID = circuitBuilder.nodeIndexes.getInt(n1);
+        if (nodeID == -1)
+            return new double[0];
+        int id = nodeID * microTicks;
+        System.arraycopy(voltages, id, toFill, 0, microTicks);
+        return toFill;
+    }
+
+    /**
+     * @param hint Checks the hint first
+     * @return -1 if the node doesn't exist.
+     */
+    public int getNodeID(Node node, int hint) {
+        List<SimulationNode> allIndexedNodes = circuitBuilder.allIndexedNodes;
+        if (hint >= 0 && hint < allIndexedNodes.size() && allIndexedNodes.get(hint).node.equals(node))
+            return hint;
+        return circuitBuilder.nodeIndexes.getInt(node);
+    }
+}

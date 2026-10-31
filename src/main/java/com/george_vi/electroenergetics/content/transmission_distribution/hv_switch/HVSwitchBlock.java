@@ -1,0 +1,206 @@
+package com.george_vi.electroenergetics.content.transmission_distribution.hv_switch;
+
+import com.george_vi.electroenergetics.*;
+import com.george_vi.electroenergetics.content.connector.ConnectorBlock;
+import com.george_vi.electroenergetics.content.wire_spool.WireSpoolItem;
+import com.george_vi.electroenergetics.foundation.base.SimpleElectricalDeviceBlock;
+import com.george_vi.electroenergetics.simulation.infrastructure.InfrastructureSavedData;
+import com.george_vi.electroenergetics.devices.device.DevicesSavedData;
+import com.george_vi.electroenergetics.devices.device.SimulatedDeviceType;
+import com.simibubi.create.AllItems;
+import com.simibubi.create.AllShapes;
+import com.simibubi.create.AllSoundEvents;
+import com.simibubi.create.foundation.block.IBE;
+import net.createmod.catnip.placement.IPlacementHelper;
+import net.createmod.catnip.placement.PlacementHelpers;
+import net.createmod.catnip.placement.PlacementOffset;
+import net.minecraft.MethodsReturnNonnullByDefault;
+import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
+import net.minecraft.server.level.ServerLevel;
+import net.minecraft.util.RandomSource;
+import net.minecraft.world.InteractionHand;
+import net.minecraft.world.ItemInteractionResult;
+import net.minecraft.world.entity.player.Player;
+import net.minecraft.world.item.BlockItem;
+import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
+import net.minecraft.world.level.BlockGetter;
+import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Mirror;
+import net.minecraft.world.level.block.Rotation;
+import net.minecraft.world.level.block.entity.BlockEntityType;
+import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
+import net.minecraft.world.level.block.state.properties.DirectionProperty;
+import net.minecraft.world.phys.BlockHitResult;
+import net.minecraft.world.phys.Vec3;
+import net.minecraft.world.phys.shapes.CollisionContext;
+import net.minecraft.world.phys.shapes.VoxelShape;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
+import java.util.function.Predicate;
+
+public class HVSwitchBlock extends SimpleElectricalDeviceBlock<HVSwitchDevice> implements IBE<HVSwitchBlockEntity> {
+    public static final DirectionProperty FACING = BlockStateProperties.HORIZONTAL_FACING;
+    public static final BooleanProperty POWERED = BlockStateProperties.POWERED;
+    private static final int placementHelperId = PlacementHelpers.register(new PlacementHelper());
+
+    public HVSwitchBlock(Properties properties) {
+        super(properties);
+        registerDefaultState(defaultBlockState().setValue(POWERED, false));
+    }
+
+    @Override
+    public SimulatedDeviceType<HVSwitchDevice> getDevice() {
+        return CEESimulatedDevices.HV_SWITCH.get();
+    }
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> builder) {
+        builder.add(FACING, POWERED);
+    }
+
+    @Nullable
+    @Override
+    public BlockState getStateForPlacement(BlockPlaceContext context) {
+        return defaultBlockState().setValue(FACING, context.getPlayer().isShiftKeyDown() ? context.getHorizontalDirection().getOpposite() : context.getHorizontalDirection());
+    }
+
+    @Override
+    public void onPlace(BlockState state, Level level, BlockPos pos, BlockState oldState, boolean movedByPiston) {
+        BlockPos targetPos = pos.relative(state.getValue(HVSwitchBlock.FACING), 2);
+        BlockState targetState = level.getBlockState(targetPos);
+        if (CEEBlocks.CONNECTOR.has(targetState))
+            if (targetState.getValue(ConnectorBlock.STYLE) != ConnectorBlock.Style.LONG)
+                level.setBlockAndUpdate(targetPos, targetState.setValue(ConnectorBlock.STYLE, ConnectorBlock.Style.LONG));
+
+        super.onPlace(state, level, pos, oldState, movedByPiston);
+    }
+
+    @Override
+    public Map<Integer, Vec3> getNodePositions(Level level, BlockPos pos, BlockState state) {
+        return CEENodeConfigurations.HV_SWITCH.getNodes(state.getValue(FACING));
+    }
+
+    @Override
+    public Vec3 getNodePosition(Level level, BlockPos pos, BlockState state, int id) {
+        return CEENodeConfigurations.HV_SWITCH.getNodePos(state.getValue(FACING), id);
+    }
+
+    @Override
+    protected VoxelShape getShape(BlockState state, BlockGetter level, BlockPos pos, CollisionContext context) {
+        return AllShapes.SIX_VOXEL_POLE.get(Direction.Axis.Y);
+    }
+
+    @Override
+    protected ItemInteractionResult useItemOn(ItemStack stack, BlockState state, Level level, BlockPos pos, Player player, InteractionHand hand, BlockHitResult hitResult) {
+        IPlacementHelper placementHelper = PlacementHelpers.get(placementHelperId);
+        if (!player.isShiftKeyDown() && player.mayBuild()) {
+            if (placementHelper.matchesItem(stack)) {
+                placementHelper.getOffset(player, level, state, pos, hitResult)
+                        .placeInWorld(level, (BlockItem) stack.getItem(), player, hand, hitResult);
+                return ItemInteractionResult.SUCCESS;
+            }
+        }
+
+        if (AllItems.WRENCH.isIn(stack) || stack.getItem() instanceof WireSpoolItem || CEEItems.EMPTY_SPOOL.isIn(stack))
+            return ItemInteractionResult.PASS_TO_DEFAULT_BLOCK_INTERACTION;
+
+        if (level instanceof ServerLevel serverLevel) {
+            HVSwitchDevice device = DevicesSavedData.load(serverLevel).getDevice(pos, HVSwitchDevice.class);
+            if (device != null) {
+                if (level.getBlockEntity(pos) instanceof HVSwitchBlockEntity be) {
+                    device.isConnecting = !be.connected;
+                    be.connected = !be.connected;
+                    be.sendData();
+                }
+            }
+            AllSoundEvents.WRENCH_ROTATE.playOnServer(level, pos);
+        }
+        return ItemInteractionResult.SUCCESS;
+    }
+
+    @Override
+    protected void neighborChanged(BlockState state, Level level, BlockPos pos, Block neighborBlock, BlockPos neighborPos, boolean movedByPiston) {
+        super.neighborChanged(state, level, pos, neighborBlock, neighborPos, movedByPiston);
+        boolean powered = level.hasNeighborSignal(pos);
+
+        if (state.getValue(POWERED) != powered) {
+            level.setBlockAndUpdate(pos, state.setValue(POWERED, powered));
+
+            if (level instanceof ServerLevel serverLevel) {
+                HVSwitchDevice device = DevicesSavedData.load(serverLevel).getDevice(pos, HVSwitchDevice.class);
+                if (device != null) {
+                    if (level.getBlockEntity(pos) instanceof HVSwitchBlockEntity be) {
+                        device.isConnecting = !powered;
+                        be.connected = !powered;
+                        be.sendData();
+                    }
+                }
+                AllSoundEvents.WRENCH_ROTATE.playOnServer(level, pos);
+            }
+        }
+
+    }
+
+    @Override
+    public void tick(BlockState state, ServerLevel level, BlockPos pos, RandomSource random) {
+        super.tick(state, level, pos, random);
+        InfrastructureSavedData sd = InfrastructureSavedData.load(level);
+
+        BlockPos targetPos = pos.relative(state.getValue(HVSwitchBlock.FACING), 2);
+        HVSwitchDevice device = DevicesSavedData.load(level).getDevice(pos, HVSwitchDevice.class);
+
+        if (device != null)
+            device.target = targetPos;
+    }
+
+    @Override
+    public Class<HVSwitchBlockEntity> getBlockEntityClass() {
+        return HVSwitchBlockEntity.class;
+    }
+
+    @Override
+    public BlockEntityType<? extends HVSwitchBlockEntity> getBlockEntityType() {
+        return CEEBlockEntityTypes.HV_SWITCH.get();
+    }
+
+    @Override
+    protected BlockState rotate(BlockState state, Rotation rotation) {
+        return state.setValue(FACING, rotation.rotate(state.getValue(FACING)));
+    }
+
+    @Override
+    protected BlockState mirror(BlockState state, Mirror mirror) {
+        return state.setValue(FACING, mirror.mirror(state.getValue(FACING)));
+    }
+
+    @MethodsReturnNonnullByDefault
+    private static class PlacementHelper implements IPlacementHelper {
+        @Override
+        public Predicate<ItemStack> getItemPredicate() {
+            return CEEBlocks.CONNECTOR::isIn;
+        }
+
+        @Override
+        public Predicate<BlockState> getStatePredicate() {
+            return CEEBlocks.HV_SWITCH::has;
+        }
+
+        @Override
+        public PlacementOffset getOffset(Player player, Level level, BlockState state, BlockPos pos, BlockHitResult ray) {
+            BlockPos targetPos = pos.relative(state.getValue(FACING), 2);
+            BlockState targetState = level.getBlockState(targetPos);
+
+            if (targetState.canBeReplaced()) {
+                return PlacementOffset.success(targetPos, s -> s.setValue(ConnectorBlock.STYLE, ConnectorBlock.Style.LONG).setValue(ConnectorBlock.FACING, Direction.UP));
+            } else
+                return PlacementOffset.fail();
+        }
+    }
+}
